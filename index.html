@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Animation</title>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <canvas style="background-color: #000;"></canvas>
+    <script>
+        var canvas = document.querySelector("canvas");
+        var context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        var an = 0.04;
+        var k = -0.07;
+        var no = 5;
+
+        function animate() {
+            an += k;
+
+            // Adjusted formula to draw a flower
+            var radius = (canvas.width / 4) * Math.sin(5 * an); // 5 petals
+            var x = canvas.width / 2 + radius * Math.cos(an);
+            var y = canvas.height / 2 + radius * Math.sin(an);
+
+            context.beginPath();
+            context.moveTo(x, y);
+            context.strokeStyle = "hsl(" + 360 * Math.random() + ", 100%, 50%)";
+
+            for (var a = 0; a < 2 * Math.PI; a += 0.01) {
+                var xt = x + 8 * Math.cos(no * a) * Math.cos(a);
+                var yt = y + 8 * Math.cos(no * a) * Math.sin(a);
+                context.lineTo(xt, yt);
+            }
+
+            context.stroke();
+            context.closePath();
+
+            context.beginPath();
+            context.moveTo(canvas.width / 2, canvas.height / 2);
+            context.lineTo(x, y);
+            context.stroke();
+            context.closePath();
+
+            if (an > 6.5) {
+                k = -0.07;
+                no = Math.floor(Math.random() * 9) + 2;
+                context.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            if (an < -0.07) {
+                k = 0.07;
+                no = Math.floor(Math.random() * 9) + 2;
+                context.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
